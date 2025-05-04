@@ -1,0 +1,90 @@
+/* Register Page Styles */
+.register-card {
+  max-width: 500px;
+}
+
+.auth-success {
+  background-color: #d1fae5;
+  color: #065f46;
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  font-size: 0.875rem;
+}
+
+.form-step {
+  margin-bottom: 24px;
+}
+
+.step-divider {
+  position: relative;
+  text-align: center;
+  margin: 24px 0;
+}
+
+.step-divider::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-color: #e5e7eb;
+}
+
+.step-divider span {
+  position: relative;
+  display: inline-block;
+  padding: 0 12px;
+  background-color: white;
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+.form-action-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.form-action-row button {
+  flex: 1;
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: #10b981;
+  border: 1px solid #10b981;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-outline:hover {
+  background-color: #ecfdf5;
+}
+
+.btn-outline.disabled {
+  color: #9ca3af;
+  border-color: #d1d5db;
+  background-color: #f3f4f6;
+  cursor: not-allowed;
+}
+
+.verified-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: #d1fae5;
+  color: #065f46;
+  padding: 12px;
+  border-radius: 6px;
+  margin-top: 16px;
+}
+
+.verified-badge svg {
+  color: #10b981;
+}

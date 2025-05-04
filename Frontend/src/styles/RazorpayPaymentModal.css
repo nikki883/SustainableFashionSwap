@@ -1,0 +1,131 @@
+.payment-modal-container {
+    padding: 24px;
+  }
+  
+  .payment-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+  }
+  
+  .payment-loading-text {
+    margin-top: 16px;
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .payment-error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+  }
+  
+  .error-icon {
+    color: #ef4444;
+    width: 48px;
+    height: 48px;
+  }
+  
+  .error-message {
+    margin-top: 16px;
+    font-size: 14px;
+    color: #ef4444;
+  }
+  
+  .try-again-button {
+    margin-top: 16px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .payment-success {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+  }
+  
+  .success-icon {
+    color: #16a34a;
+    width: 48px;
+    height: 48px;
+  }
+  
+  .success-title {
+    margin-top: 16px;
+    font-size: 18px;
+    font-weight: 500;
+    color: #16a34a;
+  }
+  
+  .success-message {
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .payment-summary {
+    background-color: #f9fafb;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 24px;
+  }
+  
+  .summary-title {
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+  
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+  
+  .summary-divider {
+    border-top: 1px solid #e5e7eb;
+    margin: 8px 0;
+  }
+  
+  .summary-total {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 500;
+  }
+  
+  .payment-actions {
+    text-align: center;
+  }
+  
+  .pay-button {
+    background-color: #16a34a;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    font-weight: 500;
+  }
+  
+  .pay-button:hover {
+    background-color: #15803d;
+  }
+  
+  .secured-by {
+    margin-top: 8px;
+    font-size: 12px;
+    color: #666;
+  }
+  
+  .secured-by-name {
+    font-weight: 500;
+  }

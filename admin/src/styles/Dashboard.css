@@ -1,0 +1,281 @@
+/* Dashboard.css */
+.dashboard-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  .stats-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .stat-card {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .stat-icon {
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+  }
+  
+  .stat-icon.users {
+    background-color: #e6f7ff;
+    color: #1890ff;
+  }
+  
+  .stat-icon.items {
+    background-color: #fff7e6;
+    color: #fa8c16;
+  }
+  
+  .stat-icon.swaps {
+    background-color: #f6ffed;
+    color: #52c41a;
+  }
+  
+  .stat-icon.buys {
+    background-color: #fff0f6;
+    color: #eb2f96;
+  }
+  
+  .stat-content {
+    flex: 1;
+  }
+  
+  .stat-content h3 {
+    margin: 0 0 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #8e8e8e;
+  }
+  
+  .stat-value {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #333;
+  }
+  
+  .stat-label {
+    margin: 0.25rem 0 0;
+    font-size: 0.85rem;
+    color: #8e8e8e;
+  }
+  
+  .charts-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .chart-container {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    padding: 1.5rem;
+  }
+  
+  .chart-container h3 {
+    margin: 0 0 1.5rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .chart {
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px dashed #e6e6e6;
+    border-radius: 8px;
+  }
+  
+  .chart-placeholder {
+    color: #8e8e8e;
+    font-style: italic;
+  }
+  
+  .recent-activity,
+  .issues-section {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    padding: 1.5rem;
+  }
+  
+  .recent-activity h3,
+  .issues-section h3 {
+    margin: 0 0 1.5rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .activity-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 0.75rem;
+  }
+  
+  .activity-tabs button {
+    padding: 0.5rem 1rem;
+    background: none;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    color: #666;
+  }
+  
+  .activity-tabs button.active {
+    background-color: #f0f7ff;
+    color: #1890ff;
+    font-weight: 500;
+  }
+  
+  .activity-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .activity-item {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #f5f5f5;
+  }
+  
+  .activity-item:last-child {
+    border-bottom: none;
+  }
+  
+  .activity-icon {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+  }
+  
+  .activity-icon.users {
+    background-color: #e6f7ff;
+    color: #1890ff;
+  }
+  
+  .activity-icon.items {
+    background-color: #fff7e6;
+    color: #fa8c16;
+  }
+  
+  .activity-icon.swaps {
+    background-color: #f6ffed;
+    color: #52c41a;
+  }
+  
+  .activity-content {
+    flex: 1;
+  }
+  
+  .activity-content p {
+    margin: 0 0 0.25rem;
+    font-size: 0.9rem;
+    color: #333;
+  }
+  
+  .activity-time {
+    font-size: 0.8rem;
+    color: #8e8e8e;
+  }
+  
+  .issues-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .issue-item {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    padding: 1rem;
+    background-color: #fffbe6;
+    border-radius: 8px;
+    border-left: 4px solid #faad14;
+  }
+  
+  .issue-icon {
+    color: #faad14;
+  }
+  
+  .issue-content {
+    flex: 1;
+  }
+  
+  .issue-content h4 {
+    margin: 0 0 0.25rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .issue-content p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #666;
+  }
+  
+  .issue-action {
+    padding: 0.5rem 1rem;
+    background-color: white;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .issue-action:hover {
+    background-color: #f9f9f9;
+    border-color: #faad14;
+    color: #faad14;
+  }
+  
+  .loading, .error {
+    text-align: center;
+    padding: 2rem;
+    color: #666;
+    font-size: 1rem;
+  }
+  
+  .error {
+    color: #cf1322;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .charts-section {
+      grid-template-columns: 1fr;
+    }
+    
+    .chart {
+      height: 250px;
+    }
+  }

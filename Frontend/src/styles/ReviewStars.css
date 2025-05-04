@@ -1,0 +1,24 @@
+.stars-row {
+    display: flex;
+  }
+  
+  .star {
+    transition: color 0.2s;
+  }
+  
+  .star-filled {
+    color: #f59e0b;
+    fill: #f59e0b;
+  }
+  
+  .star-empty {
+    color: #d1d5db;
+  }
+  
+  .star-clickable {
+    cursor: pointer;
+  }
+  
+  .star-readonly {
+    cursor: default;
+  }

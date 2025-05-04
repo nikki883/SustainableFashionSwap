@@ -1,0 +1,82 @@
+  .item-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+  
+  .item-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15); 
+  }
+  .item-card-img-container {
+    width: 250px;
+    height: 220px;
+    overflow: hidden;
+    position: relative;
+    }
+    
+    
+       
+  .item-card-img {
+    width: 100%;
+    object-fit: cover;
+    object-position: center; 
+    transition: transform 0.5s ease;
+  }
+  
+  
+  .item-card:hover .item-card-img {
+    overflow: hidden;
+    transform: scale(1.05);
+    object-position: top;
+  }
+  
+  .item-card-content {
+    padding: 16px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .item-card-title {
+    font-size: 18px;
+    margin: 0 0 8px 0;
+    font-weight: 600;
+    color: #333;
+    line-height: 1.3;
+  }
+  
+  .item-card-size {
+    font-size: 14px;
+    color: #666;
+    margin: 0 0 8px 0;
+  }
+  
+  .item-card-price {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 8px 0 0;
+    color: #222;
+    margin-top: auto; /* Pushes price to bottom of content area */
+  }
+  
+  /* For responsive grid layout */
+  @media (max-width: 768px) {
+    .item-card-img-container {
+      height: 200px; /* Slightly smaller on tablets */
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .item-card-img-container {
+      height: 180px; /* Even smaller on mobile */
+    }
+    
+    .item-card-title {
+      font-size: 16px;
+    }
+    
+    .item-card-content {
+      padding: 12px;
+    }
+  }

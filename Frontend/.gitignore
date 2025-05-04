@@ -1,0 +1,45 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Dependency folders
+node_modules/
+admin/node_modules/
+Frontend/node_modules/
+Backend/node_modules/
+
+# Build output
+dist/
+dist-ssr/
+.cache/
+.next/
+.out/
+.temp/
+tmp/
+
+# Environment files
+.env
+.env.*
+admin/.env
+Frontend/.env
+Backend/.env
+
+# OS and Editor junk
+.DS_Store
+Thumbs.db
+ehthumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Test coverage
+coverage/

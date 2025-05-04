@@ -1,0 +1,288 @@
+/* Main container */
+.swap-history {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.swap-history h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: #333;
+  text-align: center;
+}
+
+/* Filter section */
+.filter-section {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: 1.5rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.filter-section label {
+  margin-right: 0.75rem;
+  font-weight: 500;
+  color: #555;
+}
+
+.filter-section select {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: white;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.filter-section select:focus {
+  outline: none;
+  border-color: #4caf50;
+}
+
+/* Loading and error states */
+.loading,
+.error,
+.no-swaps {
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.1rem;
+  color: #666;
+}
+
+.error {
+  color: #e53935;
+}
+
+/* Swap list */
+.swap-list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Swap card */
+.swap-list .swap-card {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.swap-list .swap-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Swap history images */
+.swap-history-images {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border-bottom: 1px solid #eee;
+}
+
+.swap-history-images .swap-image {
+  width: 48%;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Swap history details */
+.swap-history-details {
+  padding: 1rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.swap-history-details p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.swap-history-details strong {
+  color: #333;
+  font-weight: 600;
+}
+
+/* Status badges */
+.status {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.status.completed {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.status.declined {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.status.in-progress {
+  background-color: #e3f2fd;
+  color: #1565c0;
+}
+
+.status.pending {
+  background-color: #fff8e1;
+  color: #f57f17;
+}
+
+/* Completion progress */
+.completion-progress {
+  margin-top: 0.5rem;
+  padding: 0.75rem;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+}
+
+.completion-progress p {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.9rem;
+}
+
+.completion-users {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+}
+
+.completion-users span {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+.completion-users .confirmed {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.completion-users .pending {
+  background-color: #fff8e1;
+  color: #f57f17;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .swap-list {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-section {
+    justify-content: center;
+  }
+
+  .swap-history h2 {
+    font-size: 1.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .swap-history {
+    padding: 1rem 0.5rem;
+  }
+
+  .swap-history-images .swap-image {
+    height: 100px;
+  }
+
+  .completion-users {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .swap-history h2 {
+    font-size: 1.5rem;
+  }
+}
+
+/* Additional styles for empty state */
+.no-swaps {
+  grid-column: 1 / -1;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 3rem 1rem;
+  text-align: center;
+  color: #757575;
+  font-size: 1.1rem;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.swap-list .swap-card {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Improved status badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.75rem;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-left: 0.5rem;
+}
+
+.badge-completed {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.badge-declined {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.badge-in-progress {
+  background-color: #e3f2fd;
+  color: #1565c0;
+}
+
+.badge-pending {
+  background-color: #fff8e1;
+  color: #f57f17;
+}
+
+.badge-countered {
+  background-color: #f3e5f5;
+  color: #6a1b9a;
+}
+
+.badge-approved {
+  background-color: #e0f2f1;
+  color: #00695c;
+}

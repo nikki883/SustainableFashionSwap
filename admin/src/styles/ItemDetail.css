@@ -1,0 +1,318 @@
+.item-detail-container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  
+  .item-removed-banner {
+    background-color: #fee2e2;
+    color: #b91c1c;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+  }
+  
+  .item-detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 24px;
+  }
+  
+  .item-images-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .main-image {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .main-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .image-thumbnails {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+  }
+  
+  .thumbnail {
+    width: 60px;
+    height: 60px;
+    border-radius: 4px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid transparent;
+  }
+  
+  .thumbnail.active {
+    border-color: #6366f1;
+  }
+  
+  .thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .item-info-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .item-header {
+    margin-bottom: 16px;
+  }
+  
+  .item-header h2 {
+    margin: 0 0 8px 0;
+    font-size: 24px;
+  }
+  
+  .item-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  
+  .badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+  
+  .badge.swapped {
+    background-color: #e0e7ff;
+    color: #4338ca;
+  }
+  
+  .badge.sold {
+    background-color: #dcfce7;
+    color: #166534;
+  }
+  
+  .badge.category {
+    background-color: #f3f4f6;
+    color: #1f2937;
+  }
+  
+  .item-details {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .detail-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #f3f4f6;
+  }
+  
+  .detail-label {
+    font-weight: 500;
+    color: #666;
+  }
+  
+  .detail-value {
+    font-weight: 500;
+  }
+  
+  .item-description {
+    margin-top: 16px;
+  }
+  
+  .item-description h3 {
+    margin: 0 0 8px 0;
+    font-size: 16px;
+  }
+  
+  .item-description p {
+    margin: 0;
+    color: #4b5563;
+    line-height: 1.5;
+  }
+  
+  .item-owner {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #f3f4f6;
+  }
+  
+  .item-owner h3 {
+    margin: 0 0 8px 0;
+    font-size: 16px;
+  }
+  
+  .owner-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .owner-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #6366f1;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  .owner-avatar img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .owner-name {
+    margin: 0;
+    font-weight: 500;
+  }
+  
+  .owner-email {
+    margin: 4px 0 0 0;
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .item-actions {
+    margin-top: 24px;
+  }
+  
+  .remove-button {
+    width: 100%;
+    padding: 8px 16px;
+    background-color: #fee2e2;
+    color: #b91c1c;
+    border: none;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  
+  .item-transactions {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 24px;
+  }
+  
+  .transactions-tabs {
+    display: flex;
+    border-bottom: 1px solid #e5e7eb;
+    margin-bottom: 16px;
+  }
+  
+  .transactions-tabs button {
+    padding: 8px 16px;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    font-weight: 500;
+  }
+  
+  .transactions-tabs button.active {
+    border-bottom-color: #6366f1;
+    color: #6366f1;
+  }
+  
+  .transactions-list {
+    min-height: 200px;
+  }
+  
+  .transactions-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .transactions-table th {
+    text-align: left;
+    padding: 12px 8px;
+    border-bottom: 1px solid #e5e7eb;
+    font-weight: 500;
+    color: #666;
+  }
+  
+  .transactions-table td {
+    padding: 12px 8px;
+    border-bottom: 1px solid #f3f4f6;
+  }
+  
+  .user-cell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .user-avatar-small {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #6366f1;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+  }
+  
+  .status-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: capitalize;
+  }
+  
+  .status-badge.pending {
+    background-color: #fef3c7;
+    color: #92400e;
+  }
+  
+  .status-badge.completed {
+    background-color: #dcfce7;
+    color: #166534;
+  }
+  
+  .status-badge.rejected {
+    background-color: #fee2e2;
+    color: #b91c1c;
+  }
+  
+  .no-transactions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+    color: #666;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .item-detail-grid {
+      grid-template-columns: 1fr;
+    }
+  }
