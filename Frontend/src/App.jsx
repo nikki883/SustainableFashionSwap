@@ -10,6 +10,9 @@ import ProtectedRoute from "./components/ProtectedRoute"
 import Navbar from "./components/Navbar/Navbar"
 import Footer from "./components/Footer/Footer"
 import LoadingSpinner from "./components/LoadingSpinner"
+import TermsConditions from './pages/TermsConditions';
+import AboutPage from './pages/AboutPage';
+
 
 
 // Lazy-loaded components
@@ -28,6 +31,8 @@ const Chat = lazy(() => import("./pages/Chat"))
 const SwapRequestPage = lazy(() => import("./pages/SwapRequestPage"))
 const ItemDetails = lazy(() => import("./components/ItemDetails"))
 const NotFound = lazy(() => import("./pages/NotFound"))
+const FQA = lazy(() => import("./pages/FQA"))
+
 
 function App() {
   return (
@@ -46,8 +51,13 @@ function App() {
               <Route path="/items/:id" element={<ItemDetails />} />
               <Route path="/users/:id" element={<UserProfilePage />} />
               <Route path="/settings" element={<Settings />} />
-              <Route path="/items" element={<SearchResults />} />
+              <Route path="/search" element={<SearchResults />} />
               <Route path="/support" element={<SupportForm />} />
+
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/terms" element={<TermsConditions />} />
+              <Route path="/faq" element={<FQA />} />
+
 
               <Route element={<ProtectedRoute />}>
                 <Route path="/add-item" element={<AddItem />} />
@@ -55,6 +65,7 @@ function App() {
                 <Route path="/swap-history" element={<SwapHistory />} />
                 <Route path="/swap-requests" element={<SwapRequestPage />} />
                 <Route path="/chat" element={<Chat />} />
+                <Route path="/chat/:id" element={<Chat />} />
               </Route>
 
               <Route path="*" element={<NotFound />} />

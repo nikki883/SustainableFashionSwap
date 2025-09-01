@@ -10,9 +10,10 @@ const DeliveryOptionsModal = ({ isOpen, onClose, swap, onDeliverySelected }) => 
   const [submitting, setSubmitting] = useState(false)
   const [showPaymentModal, setShowPaymentModal] = useState(false)
   const [error, setError] = useState("")
-
+  
   // Platform delivery fee
   const deliveryFee = 50
+  const apiUrl = import.meta.env.VITE_API_URL 
 
   useEffect(() => {
     if (isOpen) {
@@ -45,7 +46,6 @@ const DeliveryOptionsModal = ({ isOpen, onClose, swap, onDeliverySelected }) => 
       setSubmitting(true)
       setError("")
 
-      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000"
 
       const response = await axios.put(
         `${apiUrl}/api/swaps/delivery`,

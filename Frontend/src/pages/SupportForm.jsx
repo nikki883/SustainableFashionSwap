@@ -39,7 +39,7 @@ const SupportForm = () => {
     try {
       
       console.log("Sending support request:", formData);
-      await axios.post("http://localhost:5000/api/support", formData, {
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/support`, formData, {
         withCredentials: true, 
       });
 

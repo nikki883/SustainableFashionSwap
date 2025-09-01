@@ -11,7 +11,6 @@ const ItemDetails = () => {
   const navigate = useNavigate()
   const [item, setItem] = useState(null)
   const [similarItems, setSimilarItems] = useState([])
-  const [buyRequestStatus, setBuyRequestStatus] = useState(null)
   const [isSwapModalOpen, setIsSwapModalOpen] = useState(false)
   const [isProcessing, setIsProcessing] = useState(false)
   const [shareModalOpen, setShareModalOpen] = useState(false)
@@ -21,7 +20,7 @@ const ItemDetails = () => {
   useEffect(() => {
     const fetchItem = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/items/${id}`)
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/items/${id}`)
         const data = await res.json()
         setItem(data)
       } catch (err) {
@@ -38,7 +37,7 @@ const ItemDetails = () => {
       if (!item) return
 
       try {
-        const res = await fetch(`http://localhost:5000/api/items/${item._id}/similar`)
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/items/${item._id}/similar`)
         const data = await res.json()
         setSimilarItems(data)
       } catch (err) {
@@ -49,27 +48,6 @@ const ItemDetails = () => {
     fetchSimilarItems()
   }, [item])
 
-  useEffect(() => {
-    const fetchBuyRequestStatus = async () => {
-      if (!user || !item) return
-
-      try {
-        const res = await fetch(`http://localhost:5000/api/buy/request/${id}`, {
-          method: "GET",
-          credentials: "include",
-        })
-        if (res.ok) {
-          const data = await res.json()
-          setBuyRequestStatus(data.status)
-        }
-      } catch (err) {
-        console.error("Error fetching buy request status", err)
-      }
-    }
-
-    fetchBuyRequestStatus()
-  }, [user, item, id])
-
   const handleSendSwapRequest = () => {
     setIsSwapModalOpen(true)
   }
@@ -77,16 +55,16 @@ const ItemDetails = () => {
   const handleSwapOfferSubmit = async (swapData) => {
     setIsProcessing(true)
     try {
-      const response = await fetch("http://localhost:5000/api/swaps/request", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/swaps/request`, {
         method: "POST",
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(swapData),
+        body: JSON.stringify(swapData), 
       })
 
-      const data = await response.json()
+      const data = await response.json() 
 
       if (!response.ok) throw new Error(data.error || "Failed to send request")
 
@@ -100,96 +78,6 @@ const ItemDetails = () => {
     }
   }
 
-  const handleBuyRequest = async () => {
-    setIsProcessing(true)
-    try {
-      const res = await fetch("http://localhost:5000/api/buy/request", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          itemId: item._id,
-          sellerId: item.owner._id,
-        }),
-      })
-
-      const data = await res.json()
-
-      if (res.ok) {
-        alert("Buy request sent! Waiting for response.")
-        setBuyRequestStatus("pending")
-      } else {
-        alert(data.message || "Buy request failed.")
-      }
-    } catch (err) {
-      console.error(err)
-      alert("Error sending buy request.")
-    } finally {
-      setIsProcessing(false)
-    }
-  }
-
-  const handlePayment = async () => {
-    try {
-      const { data } = await axios.post(
-        "http://localhost:5000/api/payment/create-order",
-        {
-          amount: item?.price ? Number.parseInt(item.price.replace(/\D/g, "")) * 100 : 5000, // amount in paise
-          itemId: item._id,
-          sellerId: item.owner._id,
-        },
-        { withCredentials: true },
-      )
-
-      const options = {
-        key: "rzp_test_your_key_here", // Replace with your actual key
-        amount: data.order.amount,
-        currency: data.order.currency,
-        name: "Fashion Swap",
-        description: `Payment for ${item.name}`,
-        order_id: data.order.id,
-        handler: async (response) => {
-          try {
-            // Verify payment on backend
-            const verifyRes = await axios.post(
-              "http://localhost:5000/api/payment/verify",
-              {
-                razorpay_order_id: response.razorpay_order_id,
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_signature: response.razorpay_signature,
-                itemId: item._id,
-                sellerId: item.owner._id,
-              },
-              { withCredentials: true },
-            )
-
-            if (verifyRes.data.success) {
-              alert("Payment successful! The seller will be notified.")
-              setBuyRequestStatus("completed")
-            }
-          } catch (err) {
-            console.error("Payment verification error:", err)
-            alert("Payment verification failed. Please contact support.")
-          }
-        },
-        prefill: {
-          name: user?.name || "",
-          email: user?.email || "",
-        },
-        theme: {
-          color: "#ff6f61",
-        },
-      }
-
-      const razorpay = new window.Razorpay(options)
-      razorpay.open()
-    } catch (err) {
-      console.error("Payment error:", err)
-      alert("Error processing payment. Please try again.")
-    }
-  }
 
   const handleShare = () => {
     setShareModalOpen(true)
@@ -202,9 +90,13 @@ const ItemDetails = () => {
       return
     }
 
+    if (!item || !item.owner || !item._id) {
+      alert("Item details not loaded")
+      return
+    }
+
     try {
-      // Create or get conversation
-      const response = await fetch("http://localhost:5000/api/messages/conversation", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/messages/conversation`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -218,11 +110,13 @@ const ItemDetails = () => {
       })
 
       if (!response.ok) {
-        throw new Error("Failed to start conversation")
+        const errorText = await response.text()
+        throw new Error(`Failed to start conversation: ${errorText}`)
       }
 
-      // Navigate to chat page
-      navigate("/chat")
+      const data = await response.json()
+     navigate(`/chat/${data.conversationId}`);
+      //  navigate("/chat")
     } catch (err) {
       console.error("Error starting chat:", err)
       alert("Could not start chat. Please try again.")
@@ -281,31 +175,13 @@ const ItemDetails = () => {
           {/* Action buttons */}
           {user && item.owner && user._id !== item.owner._id && (
             <div className="item-actions">
-              {item.availableFor === "Buy" || item.availableFor === "Both" ? (
-                <button
-                  className="buy-btn"
-                  onClick={handleBuyRequest}
-                  disabled={isProcessing || buyRequestStatus === "pending" || buyRequestStatus === "accepted"}
-                >
-                  {buyRequestStatus === "pending"
-                    ? "Buy Request Sent"
-                    : buyRequestStatus === "accepted"
-                      ? "Buy Request Accepted"
-                      : "Buy This Item"}
-                </button>
-              ) : null}
-
-              {item.availableFor === "Swap" || item.availableFor === "Both" ? (
+              {console.log(user)}
+              {item.availableFor.includes("Swap") || item.availableFor.includes("Both")
+? (
                 <button className="swap-btn" onClick={handleSendSwapRequest} disabled={isProcessing}>
                   Request Swap
                 </button>
               ) : null}
-
-              {buyRequestStatus === "accepted" && (
-                <button className="pay-now-btn" onClick={handlePayment}>
-                  Pay Now
-                </button>
-              )}
 
               {/* Chat button */}
               <button className="chat-with-seller" onClick={handleStartChat}>
@@ -358,7 +234,7 @@ const ItemDetails = () => {
             <div className="owner-section">
               <h3>About the Seller</h3>
               <div className="owner-profile-box">
-                <img src={item.owner.profilePicture || "/default-avatar.png"} alt={item.owner.name} />
+                <img src={item.owner.profilePic || "/default-avatar.png"} alt={item.owner.name} />
                 <div style={{ flex: 1 }}>
                   <h4>{item.owner.name}</h4>
                   <p>{item.owner.location || "Location not specified"}</p>
@@ -422,7 +298,7 @@ const ItemDetails = () => {
               >
                 WhatsApp
               </button>
-              <button
+              <button 
                 className="share-option"
                 onClick={() => {
                   window.open(
@@ -450,6 +326,7 @@ const ItemDetails = () => {
           </div>
         </div>
       )}
+     
     </div>
   )
 }

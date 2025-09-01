@@ -4,7 +4,7 @@ import io from "socket.io-client";
 // Create the context
 export const SocketContext = createContext(null);
 
-// Custom hook to use the socket context easily
+// Custom hook to use the socket context easily or kahi bhiiiiiii
 export const useSocket = () => {
   return useContext(SocketContext);
 };
@@ -14,7 +14,7 @@ export default function SocketProvider({ children }) {
 
   // Memoize socket instance
   const socketInstance = useMemo(() => {
-    return io("http://localhost:5000", {
+    return io(`${import.meta.env.VITE_API_URL}`, {
       withCredentials: true,
       reconnectionAttempts: 5,     // Retry connection 5 times
       reconnectionDelay: 1000,     // 1 second between retries

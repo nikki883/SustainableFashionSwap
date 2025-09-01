@@ -15,12 +15,24 @@ const Users = () => {
   const [showFilters, setShowFilters] = useState(false)
   const navigate = useNavigate()
 
+  // Add these new state variables after the existing useState declarations
+  const [status, setStatus] = useState("")
+  const [sortBy, setSortBy] = useState("newest")
+  const [filtersApplied, setFiltersApplied] = useState(false)
+
+  // Update the useEffect to include filters
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         setLoading(true)
         const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/admin/users`, {
-          params: { page, search, limit: 10 },
+          params: {
+            page,
+            search,
+            limit: 10,
+            status: status || undefined,
+            sortBy: sortBy || undefined,
+          },
           withCredentials: true,
         })
 
@@ -35,7 +47,7 @@ const Users = () => {
     }
 
     fetchUsers()
-  }, [page, search])
+  }, [page, search, filtersApplied])
 
   const handleSearch = (e) => {
     e.preventDefault()
@@ -53,6 +65,39 @@ const Users = () => {
   const handleNextPage = () => {
     setPage((prev) => Math.min(prev + 1, totalPages))
   }
+
+  // Add a function to apply filters
+  const applyFilters = () => {
+    setPage(1) // Reset to first page when applying filters
+    setFiltersApplied(!filtersApplied) // Toggle to trigger useEffect
+  }
+
+  // Update the filters panel JSX
+  const filtersPanel = (
+    <div className="filters-panel">
+      <div className="filter-group">
+        <label>Status</label>
+        <select value={status} onChange={(e) => setStatus(e.target.value)}>
+          <option value="">All</option>
+          <option value="active">Active</option>
+          <option value="suspended">Suspended</option>
+        </select>
+      </div>
+
+      <div className="filter-group">
+        <label>Sort By</label>
+        <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+          <option value="newest">Newest</option>
+          <option value="oldest">Oldest</option>
+          <option value="name">Name</option>
+        </select>
+      </div>
+
+      <button className="apply-filters" onClick={applyFilters}>
+        Apply Filters
+      </button>
+    </div>
+  )
 
   return (
     <MainLayout title="User Management">
@@ -80,29 +125,7 @@ const Users = () => {
           </button>
         </div>
 
-        {showFilters && (
-          <div className="filters-panel">
-            <div className="filter-group">
-              <label>Status</label>
-              <select>
-                <option value="">All</option>
-                <option value="active">Active</option>
-                <option value="suspended">Suspended</option>
-              </select>
-            </div>
-
-            <div className="filter-group">
-              <label>Sort By</label>
-              <select>
-                <option value="newest">Newest</option>
-                <option value="oldest">Oldest</option>
-                <option value="name">Name</option>
-              </select>
-            </div>
-
-            <button className="apply-filters">Apply Filters</button>
-          </div>
-        )}
+        {showFilters && filtersPanel}
 
         {loading ? (
           <div className="loading">Loading users...</div>

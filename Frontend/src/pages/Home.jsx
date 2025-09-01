@@ -46,15 +46,15 @@ export default function Home() {
                 </Link>
               </div>
             </div>
-            {/* <div className="hero-image">
-              <img
+            <div className="hero-image">
+              {/* <img
                 src="/images/hero-image.jpg"
                 alt="Sustainable Fashion"
                 onError={(e) => {
                   e.target.src = "https://via.placeholder.com/500x500?text=Sustainable+Fashion"
                 }}
-              />
-            </div> */}
+              /> */}
+            </div>
           </div>
         </div>
       </section>
@@ -96,9 +96,9 @@ export default function Home() {
           <div className="steps-grid">
             {/* Step 1 */}
             <div className="step">
-              <div className="step-icon">
+              {/* <div className="step-icon">
                 <img src="/icons/upload.svg" alt="Upload" />
-              </div>
+              </div> */}
               <h3 className="step-title">1. Upload Items</h3>
               <p className="step-description">
                 Add items from your closet that you no longer wear but are in great condition.
@@ -107,18 +107,18 @@ export default function Home() {
 
             {/* Step 2 */}
             <div className="step">
-              <div className="step-icon">
+              {/* <div className="step-icon">
                 <img src="/icons/swap.svg" alt="Swap" />
-              </div>
+              </div> */}
               <h3 className="step-title">2. Swap or Sell</h3>
               <p className="step-description">Browse other users' listings and send swap or buy requests seamlessly.</p>
             </div>
 
             {/* Step 3 */}
             <div className="step">
-              <div className="step-icon">
+              {/* <div className="step-icon">
                 <img src="/icons/review.svg" alt="Review" />
-              </div>
+              </div> */}
               <h3 className="step-title">3. Rate and Repeat</h3>
               <p className="step-description">Once completed, leave a review and continue discovering new gems!</p>
             </div>

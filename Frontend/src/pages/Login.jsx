@@ -39,7 +39,7 @@ const Login = () => {
   const handleResendOtp = async () => {
     setError("")
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/send-otp", { email })
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/send-otp`, { email })
       alert(res.data.message || "OTP resent successfully!")
     } catch (err) {
       setError(err.response?.data?.message || "Failed to resend OTP")

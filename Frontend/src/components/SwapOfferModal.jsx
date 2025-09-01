@@ -12,7 +12,7 @@ const SwapOfferModal = ({ isOpen, onClose, onSubmit, itemId, ownerId }) => {
       if (!isOpen) return
 
       try {
-        const response = await fetch("http://localhost:5000/api/items/my-items", {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/items/my-items`, {
           credentials: "include",
         })
 
@@ -71,7 +71,7 @@ const SwapOfferModal = ({ isOpen, onClose, onSubmit, itemId, ownerId }) => {
               className="retry-btn"
               onClick={() => {
                 setLoading(true)
-                fetch("http://localhost:5000/api/items/my-items", {
+                fetch(`${import.meta.env.VITE_API_URL}/api/items/my-items`, {
                   credentials: "include",
                 })
                   .then((res) => {

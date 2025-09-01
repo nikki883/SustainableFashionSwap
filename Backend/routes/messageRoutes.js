@@ -10,7 +10,7 @@ import {
 
 const router = express.Router()
 
-// Get all conversations for the current user
+// Get all conversations for the current user 
 router.get("/conversations", protectRoute, getConversations)
 
 // Get messages for a specific conversation

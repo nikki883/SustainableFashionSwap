@@ -39,26 +39,6 @@ export const getConversations = async (req, res) => {
     res.status(500).json({ message: "Server error" })
   }
 }
-// export const unreadMessages = async (req, res) => {
-//   try {
-//     const userId = req.user._id.toString();
-
-//     const conversations = await Conversation.find({
-//       participants: userId,
-//     });
-
-//     const totalUnreadCount = conversations.reduce((sum, conversation) => {
-//       const unread = conversation.unreadCount.get(userId) || 0;
-//       return sum + unread;
-//     }, 0);
-
-//     res.status(200).json({ count: totalUnreadCount });
-//   } catch (error) {
-//     console.error("Error getting total unread count:", error);
-//     res.status(500).json({ message: "Server error" });
-//   }
-// };
- 
 
 
 // Get messages for a specific conversation
@@ -70,7 +50,7 @@ export const getMessages = async (req, res) => {
     // Find the conversation
     const conversation = await Conversation.findById(conversationId)
     if (!conversation) {
-      return res.status(404).json({ message: "Conversation not found" })
+      return res.status(404).json({ message: "Conversation not found" }) 
     }
 
     // Ensure the user is a participant

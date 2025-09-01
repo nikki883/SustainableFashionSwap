@@ -1,13 +1,14 @@
-import express from "express";
+import express from "express"
+import {
+  createOrder,
+  verifyPayment,
+} from "../controllers/paymentController.js"
 import { protectRoute } from "../middleware/authMiddleware.js"
-import { createOrder ,verifyPayment} from "../controllers/paymentController.js";
 
-const router = express.Router();
+const router = express.Router()
 
-// POST /api/payment/create-order
-router.post("/create-order", protectRoute,createOrder);
-// Verify payment
-router.post('/verify', protectRoute, verifyPayment);
+// Swap payment routes
+router.post("/create-order", protectRoute, createOrder)
+router.post("/verify", protectRoute, verifyPayment)
 
-export default router;
- 
+export default router

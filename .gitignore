@@ -10,3 +10,4 @@ node_modules/
 # Builds
 build/
 dist/
+echo "* text=auto" > .gitattributes

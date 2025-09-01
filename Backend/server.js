@@ -12,10 +12,9 @@ import itemRoutes from "./routes/itemRoutes.js"
 import swapRoutes from "./routes/swapRoutes.js"
 import uploadRoute from "./routes/upload.js"
 import userRoutes from "./routes/userRoutes.js"
-import buyRoutes from "./routes/buyRoutes.js"
 import paymentRoutes from "./routes/paymentRoutes.js"
 import messageRoutes from "./routes/messageRoutes.js"
-import adminAuthRoutes from "./routes/adminAuthRoutes.js"
+import adminAuthRoutes from "./routes/adminAuthRoutes.js" 
 import adminRoutes from "./routes/adminRoutes.js"
 import notificationRoutes from "./routes/notification.js";
 import reviewRoutes from "./routes/reviewRoutes.js"
@@ -160,13 +159,12 @@ app.use("/api/items", itemRoutes)
 app.use("/api/swaps", swapRoutes)
 app.use("/api/upload", uploadRoute)
 app.use("/api/users", userRoutes)
-app.use("/api/buy", buyRoutes)
-app.use("/api/payments", paymentRoutes)
+app.use("/api/payment", paymentRoutes)
 app.use("/api/messages", messageRoutes)
 app.use("/api/admin/auth", adminAuthRoutes)
 app.use("/api/admin", adminRoutes)
 app.use("/api/notification", notificationRoutes);
-app.use("/api/review",reviewRoutes)
+app.use("/api/review",reviewRoutes) 
 app.use("/api/support", supportRoutes);
 
 app.use((req, res) => {

@@ -125,9 +125,15 @@ const SwapRequestCard = ({ swap, isOwner, onUpdate }) => {
       )
     }
 
-    if (swap.status === "approved") {
+    if (swap.status === "approved"  || swap.status === "in-progress")
+       {
       // If both users confirmed the same delivery method, show "Mark as Completed" button
       if (bothConfirmedSameMethod) {
+
+         // Only show the button if current user hasn't confirmed yet
+        const userConfirmed = isRequester ? swap.requesterConfirmed : swap.ownerConfirmed
+
+        if (!userConfirmed) {
         return (
           <button className="action-button complete-button" onClick={() => setShowCompletionModal(true)}>
             <svg
@@ -145,7 +151,10 @@ const SwapRequestCard = ({ swap, isOwner, onUpdate }) => {
             </svg>
             Mark as Completed
           </button>
-        )
+        ) } else {
+          // If user has already confirmed, show waiting message
+          return <div className="waiting-confirmation">You've confirmed completion. Waiting for other user...</div>
+        }
       }
 
       // If current user hasn't confirmed yet, show "Select Delivery" button
@@ -211,7 +220,9 @@ const SwapRequestCard = ({ swap, isOwner, onUpdate }) => {
     }
 
     return null
-  }, [swap.status, swap.deliveryMethod, isOwner, processing, hasUserConfirmed, bothConfirmedSameMethod])
+  }, [swap.status, swap.deliveryMethod, isOwner, processing, hasUserConfirmed, bothConfirmedSameMethod ,  swap.requesterConfirmed,
+    swap.ownerConfirmed,
+    isRequester,])
 
   const handleUpdateStatus = async (status) => {
     try {
@@ -309,6 +320,79 @@ const SwapRequestCard = ({ swap, isOwner, onUpdate }) => {
               <span>Delivery methods don't match. Both users need to select the same method.</span>
             </div>
           )}
+        </div>
+      )}
+
+      {/* Completion Confirmation Status - Show after delivery method is confirmed */}
+      {bothConfirmedSameMethod && (
+        <div className="completion-confirmations">
+          <div className="completion-confirmations-title">Completion Status</div>
+          <div className="completion-confirmation-item">
+            <span className="completion-confirmation-user">Owner:</span>
+            <span className={`completion-confirmation-status ${swap.ownerConfirmed ? "confirmed" : "pending"}`}>
+              {swap.ownerConfirmed ? "Confirmed ✓" : "Pending"}
+            </span>
+          </div>
+          <div className="completion-confirmation-item">
+            <span className="completion-confirmation-user">Requester:</span>
+            <span className={`completion-confirmation-status ${swap.requesterConfirmed ? "confirmed" : "pending"}`}>
+              {swap.requesterConfirmed ? "Confirmed ✓" : "Pending"}
+            </span>
+          </div>
+
+          {/* Show appropriate message based on confirmation status */}
+          {swap.requesterConfirmed && swap.ownerConfirmed ? (
+            <div className="completion-success-message">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="success-icon"
+              >
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+              <span>Swap completed successfully!</span>
+            </div>
+          ) : (
+            <div className="completion-pending-message">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="pending-icon"
+              >
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+              <span>Waiting for both parties to confirm completion</span>
+            </div>
+          )}
+        </div>
+      )}
+     
+      {swap.status === "in-progress" && (
+        <div className="partial-confirmation">
+          <div className="confirmation-status">
+            <span className="confirmation-label">Requester:</span>
+            <span className={`confirmation-value ${swap.requesterConfirmed ? "confirmed" : "pending"}`}>
+              {swap.requesterConfirmed ? "Confirmed ✓" : "Pending"}
+            </span>
+          </div>
+          <div className="confirmation-status">
+            <span className="confirmation-label">Owner:</span>
+            <span className={`confirmation-value ${swap.ownerConfirmed ? "confirmed" : "pending"}`}>
+              {swap.ownerConfirmed ? "Confirmed ✓" : "Pending"}
+            </span>
+          </div>
         </div>
       )}
 

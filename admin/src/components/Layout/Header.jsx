@@ -7,24 +7,24 @@ const Header = ({ title }) => {
   const { admin } = useAuth()
   const [searchQuery, setSearchQuery] = useState("")
   const [notifications, setNotifications] = useState([
-    {
-      id: 1,
-      message: "New user registered",
-      time: "5 minutes ago",
-      read: false,
-    },
-    {
-      id: 2,
-      message: "New item reported",
-      time: "1 hour ago",
-      read: false,
-    },
-    {
-      id: 3,
-      message: "Review flagged for moderation",
-      time: "3 hours ago",
-      read: true,
-    },
+    // {
+    //   id: 1,
+    //   message: "New user registered",
+    //   time: "5 minutes ago",
+    //   read: false,
+    // },
+    // {
+    //   id: 2,
+    //   message: "New item reported",
+    //   time: "1 hour ago",
+    //   read: false,
+    // },
+    // {
+    //   id: 3,
+    //   message: "Review flagged for moderation",
+    //   time: "3 hours ago",
+    //   read: true,
+    // },
   ])
   const [showNotifications, setShowNotifications] = useState(false)
 

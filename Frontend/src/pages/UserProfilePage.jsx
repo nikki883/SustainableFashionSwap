@@ -64,7 +64,7 @@ const UserProfilePage = () => {
     <div className="profile-card">
       <div className="profile-content">
         <div className="profile-avatar">
-          <img src={user.profilePicture || "/placeholder.jpg"} alt={user.name} />
+          <img src={user.profilePic || "/placeholder.jpg"} alt={user.name} />
         </div>
 
         <div className="profile-info">
@@ -149,21 +149,24 @@ const UserProfilePage = () => {
       <UserReviews userId={userId} />
     ) : (
       <div className="items-grid">
-        {items.length > 0 ? (
-          items.map((item) => ( 
-            <ItemCard
-              key={item._id}
-              _id={item._id}
-              img={item.imageUrls?.[0]}
-              title={item.name}
-              size={item.size}
-              price={item.price}
-            />
-          ))
-        ) : (
-          <p>No items listed by this user.</p>
-        )}
-      </div>
+  {items.filter(item => !item.isSwapped).length > 0 ? (
+    items
+      .filter(item => !item.isSwapped)
+      .map((item) => (
+        <ItemCard
+          key={item._id}
+          _id={item._id}
+          img={item.imageUrls?.[0]}
+          title={item.name}
+          size={item.size}
+          price={item.price}
+        />
+      ))
+  ) : (
+    <p>No unswapped items listed by this user.</p>
+  )}
+</div>
+
     )}
   </div>
   );

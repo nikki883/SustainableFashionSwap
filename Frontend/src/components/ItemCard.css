@@ -57,19 +57,18 @@
     font-weight: 600;
     margin: 8px 0 0;
     color: #222;
-    margin-top: auto; /* Pushes price to bottom of content area */
+    margin-top: auto;
   }
   
-  /* For responsive grid layout */
   @media (max-width: 768px) {
     .item-card-img-container {
-      height: 200px; /* Slightly smaller on tablets */
+      height: 200px; 
     }
   }
   
   @media (max-width: 480px) {
     .item-card-img-container {
-      height: 180px; /* Even smaller on mobile */
+      height: 180px; 
     }
     
     .item-card-title {

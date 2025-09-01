@@ -23,7 +23,7 @@ const ChatButton = ({ userId, itemId, itemName }) => {
     // Fetch unread count on mount
     const fetchUnreadCount = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/messages/unread/${userId}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/messages/unread/${userId}`, {
           credentials: "include",
         })
 
@@ -45,7 +45,7 @@ const ChatButton = ({ userId, itemId, itemName }) => {
 
   const handleStartChat = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/messages/conversation", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/messages/conversation`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

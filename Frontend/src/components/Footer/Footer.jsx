@@ -154,9 +154,6 @@ const Footer = () => {
               <li>
                 <Link to="/about">About Us</Link>
               </li>
-              <li>
-                <Link to="/contact">Contact</Link>
-              </li>
             </ul>
           </div>
 
@@ -167,17 +164,17 @@ const Footer = () => {
               <li>
                 <Link to="/faq">FAQ</Link>
               </li>
-              <li>
+              {/* <li>
                 <Link to="/shipping">Shipping & Delivery</Link>
-              </li>
+              </li> */}
               <li>
                 <Link to="/terms">Terms & Conditions</Link>
               </li>
-              <li>
+              {/* <li>
                 <Link to="/privacy">Privacy Policy</Link>
-              </li>
+              </li> */}
               <li>
-                <Link to="/support">Customer Support</Link> {/* NEW LINE */}
+                <Link to="/support">Customer Support</Link> 
               </li>
             </ul>
           </div>

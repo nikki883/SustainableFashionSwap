@@ -65,10 +65,6 @@ const swapSchema = new mongoose.Schema({
   deliveryFeePaidByRequester: { type: Boolean, default: false },  // Track if requester has paid
   deliveryFeePaidByOwner: { type: Boolean, default: false },      // Track if owner has paid
   
-  completed: { 
-    type: Boolean, 
-    default: false 
-  },
   messages: [{
     sender: { 
       type: mongoose.Schema.Types.ObjectId, 

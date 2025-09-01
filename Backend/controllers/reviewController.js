@@ -18,8 +18,13 @@ export const submitReview = async (req, res) => {
       return res.status(404).json({ message: 'Swap not found' });
     }
 
-    if (!swap.completed) {
-      return res.status(400).json({ message: 'Cannot review an incomplete swap' });
+    // if (!swap.completed) {
+    //   return res.status(400).json({ message: 'Cannot review an incomplete swap' });
+    // }
+
+     // Check if the swap is at least in progress or completed
+    if (swap.status !== "in-progress" && swap.status !== "completed") {
+      return res.status(400).json({ message: "Cannot review a swap that is not in progress or completed" })
     }
 
     // Verify reviewer is part of this swap
@@ -42,6 +47,12 @@ export const submitReview = async (req, res) => {
 
     if (existingReview) {
       return res.status(400).json({ message: 'You have already reviewed this swap' });
+    }
+
+     // Check if the reviewer has confirmed completion
+    const isRequester = swap.requester.toString() === reviewerId.toString()
+    if ((isRequester && !swap.requesterConfirmed) || (!isRequester && !swap.ownerConfirmed)) {
+      return res.status(400).json({ message: "You must confirm completion before reviewing" })
     }
 
     // Create review

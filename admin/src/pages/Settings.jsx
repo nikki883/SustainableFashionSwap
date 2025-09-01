@@ -124,7 +124,7 @@ const Settings = () => {
           </form>
         </div>
 
-        <div className="settings-section">
+        {/* <div className="settings-section">
           <h2>System Settings</h2>
           <div className="system-settings">
             <div className="setting-group">
@@ -142,7 +142,7 @@ const Settings = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </MainLayout>
   )

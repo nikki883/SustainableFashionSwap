@@ -11,12 +11,10 @@ function Navbar() {
   const navigate = useNavigate()
   const location = useLocation()
 
-
-
   const handleSearch = (e) => {
     e.preventDefault()
     if (searchQuery.trim()) {
-      navigate(`http//localhost:5000/items?search=${searchQuery}`)
+      navigate(`/items?search=${searchQuery}`)
       setMobileMenuOpen(false)
     }
   }
@@ -66,7 +64,7 @@ function Navbar() {
         </div>
 
         {/* Search Bar - Desktop */}
-        <form className="search-form desktop-search" onSubmit={handleSearch}>
+        {/* <form className="search-form desktop-search" onSubmit={handleSearch}>
           <input
             type="text"
             placeholder="Search items..."
@@ -89,7 +87,7 @@ function Navbar() {
               <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
             </svg>
           </button>
-        </form>
+        </form> */}
 
         {/* Navigation Links - Desktop */}
         <nav className={`navbar-nav ${mobileMenuOpen ? "mobile-open" : ""}`}>
@@ -141,7 +139,7 @@ function Navbar() {
                     Add Item
                   </Link>
                 </li>
-                <li>
+                {/* <li>
                   <Link
                     to="/swap-history"
                     className={isActive("/swap-history") ? "active" : ""}
@@ -149,7 +147,7 @@ function Navbar() {
                   >
                     Swap History
                   </Link>
-                </li>
+                </li> */}
                 <li>
                   <Link
                     to="/swap-requests"
@@ -236,9 +234,9 @@ function Navbar() {
                   aria-expanded={profileMenuOpen}
                   aria-haspopup="true"
                 >
-                  {currentUser.profilePicture ? (
+                  {currentUser?.profilePic? (
                     <img
-                      src={currentUser.profilePicture || "/placeholder.svg"}
+                      src={currentUser?.profilePic || "/placeholder.svg"}
                       alt="Profile"
                       className="profile-image"
                       onError={(e) => {

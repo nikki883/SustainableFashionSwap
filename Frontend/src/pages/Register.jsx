@@ -1,202 +1,3 @@
-// import React, { useState, useEffect } from 'react';
-// import { useNavigate } from 'react-router-dom';
-// import { getUserLocation } from '../utils/geoLocation';
-// import axios from 'axios';
-// import './Register.css';
-
-// const Register = () => {
-//   //used in email verification bhai ---
-//   const [email, setEmail] = useState('');
-//   const [otp, setOtp] = useState('');
-//   const [isOtpSent, setIsOtpSent] = useState(false);
-//   const [resendCooldown, setResendCooldown] = useState(false);
-//   const [timer, setTimer] = useState(30);
-//   const [success, setSuccess] = useState('');
-
-//   //yeh baki resjistration me use hoga ---
-//   const [name, setName] = useState('');
-//   const [password, setPassword] = useState('');
-//   const [confirmPassword, setConfirmPassword] = useState('');
-//   const [location, setLocation] = useState('');
-//   const [isEmailVerified, setIsEmailVerified] = useState(false);
-//   const [error, setError] = useState('');
-//   const navigate = useNavigate();
-
-//   useEffect(() => {
-//     const fetchLocation = async () => {
-//       const loc = await getUserLocation();
-//       setLocation(loc);
-//     };
-//     fetchLocation();
-//   }, []);
-
-//   const handleSendOtp = async () => {
-//     setError('');
-//     if (!email) return setError('Please enter your email');
-
-//     try {
-//       const response = await axios.post('http://localhost:5000/api/auth/send-otp', { email });
-//       if (response.data.message === 'OTP sent to your email') {
-//         setIsOtpSent(true);
-//       }
-//     } catch (err) {
-//       setError(err.response?.data?.message || 'Error sending OTP');
-//     }
-//   };
-
-
-//   useEffect(() => {
-//     let interval;
-//     if (resendCooldown) {
-//       interval = setInterval(() => {
-//         setTimer((prev) => {
-//           if (prev <= 1) {
-//             setResendCooldown(false);
-//             clearInterval(interval);
-//             return 30; // Reset timer
-//           }
-//           return prev - 1;
-//         });
-//       }, 1000); // 1 second interval
-//     }
-//     return () => clearInterval(interval); // Cleanup interval
-//   }, [resendCooldown]);
-
-//   const handleResendOtp = async () => {
-//     if (resendCooldown) {
-//       setError(`Please wait ${timer} seconds before resending OTP.`);
-//       return;
-//     }
-//     try {
-//       const response = await axios.post('http://localhost:5000/api/auth/resend-otp', { email });
-//       setIsOtpSent(true);
-//       setResendCooldown(true); // Start the cooldown
-//       setTimer(30); // Reset timer for cooldown
-//       setSuccess(response.data.message); // Show success message
-//     } catch (err) {
-//       setError(err.response?.data?.message || 'Error resending OTP');
-//     }
-//   };
-
-//   const handleVerifyOtp = async () => {
-//     setError('');
-//     try {
-//       const response = await axios.post('http://localhost:5000/api/auth/verify-otp', {
-//         email,
-//         otp,
-//       });
-//       console.log("Verifying OTP with:", { email, otp });
-      
-//       if (response.data.message === 'Email verified successfully') {
-//         setIsEmailVerified(true);
-//         setSuccess('Email verified successfully!');
-//       }
-//     } catch (err) {
-//       setError(err.response?.data?.message || 'Error verifying OTP');
-//     }
-//   };
-
-//   const handleRegister = async (e) => { 
-//     e.preventDefault();
-//     setError('');
-//     setSuccess('');
-
-//     if (!isEmailVerified) return setError('Please verify your email before registering');
-//     if (password !== confirmPassword) return setError('Passwords do not match');
-
-//     try {
-//       const response = await axios.post('http://localhost:5000/api/auth/register', {
-//         email,
-//         name,
-//         password,
-//         confirmPassword,
-//         location,
-//       });
-
-//       alert(response.data.message);
-//       setSuccess(response.data.message); 
-//       navigate('/login');
-//     } catch (err) {
-//       setError(err.response?.data?.message || 'Registration failed');
-//     }
-//   };
-
-//   return (
-//     <div className="main">
-
-//     <div className="register-container">
-//       <h2>Register</h2>
-//       {error && <p className="error">{error}</p>}
-//       {success && <p className="success">{success}</p>}
-
-
-//       <form onSubmit={handleRegister}>
-//         <input
-//           type="email"
-//           placeholder="Enter Email"
-//           value={email}
-//           onChange={(e) => setEmail(e.target.value)}
-//           required
-//         />
-//         {!isOtpSent ? (
-//           <button type="button" onClick={handleSendOtp}>Send OTP</button>
-//         ) : !isEmailVerified ? (
-//           <>
-//             <input
-//               type="text"
-//               placeholder="Enter OTP"
-//               value={otp}
-//               onChange={(e) => setOtp(e.target.value)}
-//               required
-//             />
-//             <button type="button" onClick={handleVerifyOtp}>Verify OTP</button>
-//             <button type="button" onClick={handleResendOtp} disabled={resendCooldown}>
-//             {resendCooldown ? `Resend in ${timer}s` : 'Resend OTP'}
-//           </button> 
-//           </>
-//         ) : (
-//           <p className="verified-msg">Email Verified ✔️</p>
-//         )}
-
-//         {isEmailVerified && (
-//           <>
-//             <input
-//               type="text"
-//               placeholder="Name"
-//               value={name}
-//               onChange={(e) => setName(e.target.value)}
-//               required
-//             />
-//             <input
-//               type="password"
-//               placeholder="Password"
-//               value={password}
-//               onChange={(e) => setPassword(e.target.value)}
-//               required
-//             />
-//             <input
-//               type="password"
-//               placeholder="Confirm Password"
-//               value={confirmPassword}
-//               onChange={(e) => setConfirmPassword(e.target.value)}
-//               required
-//             />
-//             <button type="submit">Register</button>
-//           </>
-//         )}
-//       </form>
-
-//       <p>
-//         Already have an account? <a href="/login">Login</a>
-//       </p>
-//     </div>
-//     </div>
-//   );
-// };
-
-// export default Register;
-
-
 import { useState, useEffect } from "react"
 import { useNavigate, Link } from "react-router-dom"
 import { getUserLocation } from "../utils/geoLocation"
@@ -254,7 +55,7 @@ const Register = () => {
     if (!email) return setError("Please enter your email")
 
     try {
-      const response = await axios.post("http://localhost:5000/api/auth/send-otp", { email })
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/send-otp`, { email })
       if (response.data.message === "OTP sent to your email") {
         setIsOtpSent(true)
         setSuccess("OTP sent to your email. Please check your inbox.")
@@ -273,7 +74,7 @@ const Register = () => {
     setError("")
     setSuccess("")
     try {
-      const response = await axios.post("http://localhost:5000/api/auth/resend-otp", { email })
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/resend-otp`, { email })
       setIsOtpSent(true)
       setResendCooldown(true) // Start the cooldown
       setTimer(30) // Reset timer for cooldown
@@ -287,7 +88,7 @@ const Register = () => {
     setError("")
     setSuccess("")
     try {
-      const response = await axios.post("http://localhost:5000/api/auth/verify-otp", {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/verify-otp`, {
         email,
         otp,
       })
@@ -311,7 +112,7 @@ const Register = () => {
     if (password !== confirmPassword) return setError("Passwords do not match")
 
     try {
-      const response = await axios.post("http://localhost:5000/api/auth/register", {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/register`, {
         email,
         name,
         password,

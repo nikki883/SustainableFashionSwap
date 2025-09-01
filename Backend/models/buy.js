@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from "mongoose"
 
 const buySchema = new mongoose.Schema(
   {
@@ -17,29 +17,32 @@ const buySchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    amount: {
+      type: Number,
+      required: true,
+    },
     status: {
       type: String,
-      enum: ["pending", "accepted", "declined", "completed"],
+      enum: ["pending", "accepted", "rejected", "processing", "completed", "cancelled"],
       default: "pending",
     },
-    counterOfferPrice: {
-      type: Number,
-      default: 0,
-    },
-    deliveryOption: {
+    paymentStatus: {
       type: String,
-      enum: ["self", "platform"],
-      default: "self",
-    }
-  ,  
-  paymentStatus: {
-    type: String,
-    enum: ["unpaid", "paid"],
-    default: "unpaid",
-  }
-},
-{ timestamps: true }
-,
-);
+      enum: ["pending", "paid", "refunding", "refunded", "failed"],
+      default: "pending",
+    },
+    orderId: {
+      type: String,
+    },
+    completedAt: {
+      type: Date,
+    },
+    notes: {
+      type: String,
+    },
+  },
+  { timestamps: true },
+)
 
-export default mongoose.model("Buy", buySchema);
+const Buy = mongoose.models.Buy || mongoose.model("Buy", buySchema)
+export default Buy

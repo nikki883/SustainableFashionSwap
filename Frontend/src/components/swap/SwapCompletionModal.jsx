@@ -16,7 +16,7 @@ const SwapCompletionModal = ({ isOpen, onClose, swap, onComplete }) => {
 
   const handleComplete = async () => {
     try {
-      setSubmitting(true)
+      setSubmitting(true) 
 
       // Update the API endpoint to mark user's confirmation
       await axios.put(
@@ -28,10 +28,10 @@ const SwapCompletionModal = ({ isOpen, onClose, swap, onComplete }) => {
         { withCredentials: true },
       )
 
-      // Check if both users have confirmed completion
+     // Check if both users have confirmed completion
       const bothConfirmed = isRequester
-        ? swap.ownerConfirmed && true // Current user is requester, owner already confirmed
-        : swap.requesterConfirmed && true // Current user is owner, requester already confirmed
+        ? swap.ownerConfirmed // Current user is requester, check if owner already confirmed
+        : swap.requesterConfirmed // Current user is owner, check if requester already confirmed
 
       // Send notification to chat
       await axios.post(
@@ -48,6 +48,7 @@ const SwapCompletionModal = ({ isOpen, onClose, swap, onComplete }) => {
       )
 
       if (bothConfirmed) {
+
         toast.success("The swap has been completed successfully!")
       } else {
         toast.success("You have marked the swap as completed. Waiting for the other user to confirm.")

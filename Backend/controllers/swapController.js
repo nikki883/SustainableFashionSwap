@@ -1,9 +1,9 @@
-    import Swap from "../models/Swap.js"
-    import Item from "../models/Item.js"
-    
-    // Create a swap request
-    export const requestSwap = async (req, res) => {
-  try {
+import Swap from "../models/Swap.js"
+import Item from "../models/Item.js"
+
+// Create a swap request
+export const requestSwap = async (req, res) => {
+  try { 
     const { requestedItem, offeredItem } = req.body
     const requester = req.user._id
 
@@ -12,7 +12,7 @@
       Item.findById(requestedItem),
       Item.findById(offeredItem),
     ])
-    
+
     if (!requestedItemDoc || !offeredItemDoc) {
       return res.status(404).json({ message: "One or both items not found" })
     }
@@ -20,7 +20,7 @@
     if (requestedItemDoc.isSwapped || offeredItemDoc.isSwapped) {
       return res.status(400).json({ message: "One or both items are already swapped" })
     }
-    
+
     const owner = requestedItemDoc.owner
     if (!owner) {
       return res.status(400).json({ message: "Requested item has no owner" })
@@ -36,9 +36,9 @@
       requesterConfirmed: false,
       ownerConfirmed: false,
     })
-    
+
     await swapRequest.save()
-    
+
     res.status(201).json({
       message: "Swap request created successfully",
       swapRequest,
@@ -58,13 +58,13 @@ export const getSwapRequests = async (req, res) => {
     const swaps = await Swap.find({
       $or: [{ requester: userId }, { owner: userId }],
     })
-    .populate("requester", "name email profilePicture")
-    .populate("owner", "name email profilePicture")
-    .populate("requestedItem")
-    .populate("offeredItem")
-    .populate("counterOffer.item")
-    .sort({ createdAt: -1 })
-    
+      .populate("requester", "name email profilePicture")
+      .populate("owner", "name email profilePicture")
+      .populate("requestedItem")
+      .populate("offeredItem")
+      .populate("counterOffer.item")
+      .sort({ createdAt: -1 })
+
     // Add isRequester field to each swap
     const swapsWithRole = swaps.map((swap) => {
       const swapObj = swap.toObject()
@@ -79,7 +79,7 @@ export const getSwapRequests = async (req, res) => {
 
       return swapObj
     })
-    
+
     res.status(200).json({ swaps: swapsWithRole })
   } catch (error) {
     console.error("Error fetching swap requests:", error)
@@ -92,35 +92,50 @@ export const updateSwapStatus = async (req, res) => {
   try {
     const { swapId, status } = req.body
     const userId = req.user._id
-    
+
     if (!["approved", "declined", "completed", "in-progress"].includes(status)) {
       return res.status(400).json({ message: "Invalid status" })
     }
-    
+
     const swap = await Swap.findById(swapId).populate("requestedItem").populate("offeredItem")
-    
+
     if (!swap) {
       return res.status(404).json({ message: "Swap request not found" })
     }
-    
+
     // Verify user is authorized to update this swap
     if (swap.owner.toString() !== userId.toString() && swap.requester.toString() !== userId.toString()) {
       return res.status(403).json({ message: "Not authorized to update this swap" })
     }
-    
+
     // Update swap status
     swap.status = status
 
-    // If approved, mark items as swapped
+    // // If approved, mark items as swapped
+    // if (status === "approved") {
+    //   await Promise.all([
+    //     Item.findByIdAndUpdate(swap.requestedItem._id, { isSwapped: true }),
+    //     Item.findByIdAndUpdate(swap.offeredItem._id, { isSwapped: true }),
+    //   ])
+    // }
+
+     // If approved, mark items as swapped and remove from user's items
     if (status === "approved") {
       await Promise.all([
-        Item.findByIdAndUpdate(swap.requestedItem._id, { isSwapped: true }),
-        Item.findByIdAndUpdate(swap.offeredItem._id, { isSwapped: true }),
+        Item.findByIdAndUpdate(swap.requestedItem._id, {
+          isSwapped: true,
+          availableFor: [], // Clear availability since it's swapped
+        }),
+        Item.findByIdAndUpdate(swap.offeredItem._id, {
+          isSwapped: true,
+          availableFor: [], // Clear availability since it's swapped
+        }),
       ])
     }
 
+
     await swap.save()
-    
+
     res.status(200).json({
       message: `Swap ${status} successfully`,
       swap,
@@ -136,21 +151,21 @@ export const confirmCompletion = async (req, res) => {
   try {
     const { swapId, userType } = req.body
     const userId = req.user._id
-    
-    if (!["requester", "owner"].includes(userType)) {
+
+    if (!["requester", "owner"].includes(userType)) { 
       return res.status(400).json({ message: "Invalid user type" })
     }
-    
+
     const swap = await Swap.findById(swapId)
-    
+
     if (!swap) {
       return res.status(404).json({ message: "Swap request not found" })
     }
-    
+
     // Verify user is authorized to update this swap
     const isRequester = swap.requester.toString() === userId.toString()
     const isOwner = swap.owner.toString() === userId.toString()
-    
+
     if (!isRequester && !isOwner) {
       return res.status(403).json({ message: "Not authorized to update this swap" })
     }
@@ -159,14 +174,22 @@ export const confirmCompletion = async (req, res) => {
     if ((userType === "requester" && !isRequester) || (userType === "owner" && !isOwner)) {
       return res.status(403).json({ message: "User type does not match your role in this swap" })
     }
-    
+
     // Update the appropriate confirmation field
     if (userType === "requester") {
-      swap.requesterConfirmed = true
+      swap.requesterConfirmed = true;
+      console.log("Requester has confirmed completion");
+      
+      // Send notification to owner (simulated)
+      console.log("Sending notification to owner: Requester has marked the swap as completed. Please confirm if you've received the item.");
     } else {
-      swap.ownerConfirmed = true
+      swap.ownerConfirmed = true;
+      console.log("Owner has confirmed completion");
+      
+      // Send notification to requester (simulated)
+      console.log("Sending notification to requester: Owner has marked the swap as completed. Please confirm if you've received the item.");
     }
-    
+
     // If both users have confirmed, mark the swap as completed
     if (swap.requesterConfirmed && swap.ownerConfirmed) {
       swap.status = "completed"
@@ -175,12 +198,13 @@ export const confirmCompletion = async (req, res) => {
       // If only one user has confirmed, mark as in-progress
       swap.status = "in-progress"
     }
-    
+
     await swap.save()
-    
+
     res.status(200).json({
       message: "Completion confirmation updated successfully",
       swap,
+      canReview: true, // Indicate that the user can now leave a review
     })
   } catch (error) {
     console.error("Error confirming completion:", error)
@@ -194,38 +218,46 @@ export const counterOffer = async (req, res) => {
     const { swapId, counterItemId } = req.body
     const userId = req.user._id
 
+    console.log("Counter offer request:", { swapId, counterItemId, userId })
+
     const swap = await Swap.findById(swapId)
-    
+
     if (!swap) {
       return res.status(404).json({ message: "Swap request not found" })
     }
-    
+
     // Verify user is the owner of the requested item
     if (swap.owner.toString() !== userId.toString()) {
       return res.status(403).json({ message: "Not authorized to counter this swap" })
     }
-    
+
     // Validate counter item
     const counterItem = await Item.findById(counterItemId)
     if (!counterItem) {
       return res.status(404).json({ message: "Counter item not found" })
     }
-    
+
     // Check if the counter item belongs to the requester
     if (counterItem.owner.toString() !== swap.requester.toString()) {
       return res.status(403).json({ message: "Counter item must belong to the requester" })
     }
-    
+
     if (counterItem.isSwapped) {
       return res.status(400).json({ message: "This item is already swapped" })
     }
-    
+
     // Update swap with counter offer
+    // swap.counterOffer = {
+    //   item: counterItemId,
+    // }
+
+    swap.offeredItem = counterItemId
     swap.counterOffer = {
       item: counterItemId,
     }
+
     swap.status = "countered"
-    
+
     await swap.save()
 
     res.status(200).json({
@@ -234,7 +266,7 @@ export const counterOffer = async (req, res) => {
     })
   } catch (error) {
     console.error("Error sending counter offer:", error)
-    res.status(500).json({ message: "Failed to send counter offer" })
+    res.status(500).json({ message: "Failed to send counter offer", error: error.message })
   }
 }
 
@@ -243,17 +275,17 @@ export const updateDeliveryMethod = async (req, res) => {
   try {
     const { swapId, method } = req.body
     const userId = req.user._id
-    
+
     if (!["self", "platform"].includes(method)) {
       return res.status(400).json({ message: "Invalid delivery method" })
     }
-    
+
     const swap = await Swap.findById(swapId)
-    
+
     if (!swap) {
       return res.status(404).json({ message: "Swap request not found" })
     }
-    
+
     // Verify user is part of this swap
     if (swap.owner.toString() !== userId.toString() && swap.requester.toString() !== userId.toString()) {
       return res.status(403).json({ message: "Not authorized to update this swap" })
@@ -263,7 +295,7 @@ export const updateDeliveryMethod = async (req, res) => {
     // Check if delivery method already exists
     const existingMethod = swap.deliveryMethod?.method || "undecided"
     const isOwner = swap.owner.toString() === userId.toString()
-    
+
     // Update delivery method based on who is setting it
     if (!swap.deliveryMethod || swap.deliveryMethod.method === "undecided") {
       // First time setting delivery method
@@ -287,9 +319,9 @@ export const updateDeliveryMethod = async (req, res) => {
         swap.deliveryMethod.ownerConfirmed = isOwner
       }
     }
-    
+
     await swap.save()
-    
+
     res.status(200).json({
       message: "Delivery method updated successfully",
       swap,
@@ -304,19 +336,19 @@ export const updateDeliveryMethod = async (req, res) => {
 export const getSwapHistory = async (req, res) => {
   try {
     const userId = req.user._id
-    
+
     const swaps = await Swap.find({
       $and: [
         { $or: [{ owner: userId }, { requester: userId }] },
         { $or: [{ status: "completed" }, { status: "declined" }, { status: "in-progress" }] },
       ],
     })
-    .populate("requester", "name email profilePicture")
-    .populate("owner", "name email profilePicture")
-    .populate("requestedItem", "name imageUrls")
-    .populate("offeredItem", "name imageUrls")
-    .sort({ updatedAt: -1 })
-    
+      .populate("requester", "name email profilePicture")
+      .populate("owner", "name email profilePicture")
+      .populate("requestedItem", "name imageUrls")
+      .populate("offeredItem", "name imageUrls")
+      .sort({ updatedAt: -1 })
+
     res.json(swaps)
   } catch (error) {
     console.error("Error fetching swap history:", error)
@@ -327,33 +359,32 @@ export const getSwapHistory = async (req, res) => {
 // Complete a swap
 export const completeSwap = async (req, res) => {
   try {
-    const { swapId } = req.body;
-    const userId = req.user._id;
+    const { swapId } = req.body
+    const userId = req.user._id
 
-    const swap = await Swap.findById(swapId);
+    const swap = await Swap.findById(swapId)
 
     if (!swap) {
-      return res.status(404).json({ message: 'Swap request not found' });
+      return res.status(404).json({ message: "Swap request not found" })
     }
 
     // Verify user is part of this swap
-    if (swap.owner.toString() !== userId.toString() && 
-        swap.requester.toString() !== userId.toString()) {
-      return res.status(403).json({ message: 'Not authorized to complete this swap' });
+    if (swap.owner.toString() !== userId.toString() && swap.requester.toString() !== userId.toString()) {
+      return res.status(403).json({ message: "Not authorized to complete this swap" })
     }
 
     // Mark swap as completed
-    swap.status = 'completed';
-    swap.completed = true;
+    swap.status = "completed"
+    swap.completed = true
 
-    await swap.save();
+    await swap.save()
 
-    res.status(200).json({ 
-      message: 'Swap completed successfully',
-      swap
-    });
+    res.status(200).json({
+      message: "Swap completed successfully",
+      swap,
+    })
   } catch (error) {
-    console.error('Error completing swap:', error);
-    res.status(500).json({ message: 'Failed to complete swap' });
+    console.error("Error completing swap:", error)
+    res.status(500).json({ message: "Failed to complete swap" })
   }
-};
+}

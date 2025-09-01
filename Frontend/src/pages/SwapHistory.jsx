@@ -17,14 +17,14 @@ function SwapHistory() {
         if (!user) return;
 
         const response = await axios.get(
-          `${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/swaps/history`,
+          `${import.meta.env.VITE_API_URL}/api/swaps/history`,
           {
             withCredentials: true, // send cookies (make sure you're logged in!)
           }
         );
 
         setSwapHistory(response.data);
-        setFilteredHistory(response.data);
+        setFilteredHistory(response.data); 
       } catch (err) {
         console.error("Error fetching swap history:", err);
         setError("Failed to fetch swap history. Please try again.");

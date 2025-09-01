@@ -1,4 +1,5 @@
-import { useState, useEffect, useMemo, useCallback } from "react"
+import { useState, useEffect, useMemo, useCallback, useContext } from "react"
+import AuthContext from "../context/AuthContext" // Import your AuthContext
 import "./ItemListing.css";
 import ItemCard from "../components/ItemCard";
 import LoadingSpinner from "../components/LoadingSpinner"
@@ -13,35 +14,64 @@ const ItemListing = () => {
     price: "",
   })
 
-   const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000"
+  // Get auth context to check if user is loaded
+  const { user, loading: authLoading } = useContext(AuthContext)
+  const API_URL = import.meta.env.VITE_API_URL 
 
-    useEffect(() => {
+  useEffect(() => {
+    // Don't fetch items until auth loading is complete
+    if (authLoading) {
+      console.log("Auth still loading, waiting...")
+      return
+    }
+
+    console.log("Auth loaded, user:", user)
+
     const fetchItems = async () => {
       try {
         setLoading(true)
-        const response = await fetch(`${API_URL}/api/items/list`)
+        console.log("Fetching items from:", `${API_URL}/api/items/list`)
+
+        const response = await fetch(`${API_URL}/api/items/list`, {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          }
+        })
+
+        console.log("Response status:", response.status)
+        console.log("Response headers:", [...response.headers.entries()])
 
         if (!response.ok) {
-          throw new Error("Failed to fetch items")
+          throw new Error(`Failed to fetch items: ${response.status} ${response.statusText}`)
         }
 
         const data = await response.json()
+        console.log("Fetched items:", data)
+        console.log("Number of items:", data.length)
+        
+        // Debug: Log items that belong to current user (should be filtered out by backend)
+        if (user) {
+          const userItems = data.filter(item => item.owner === user._id || item.owner?._id === user._id)
+          console.log("Items belonging to current user (should be empty):", userItems)
+        }
+
         setItems(data)
         setError(null)
       } catch (error) {
         console.error("Error fetching items:", error)
-        setError("Failed to load items. Please try again.")
+        setError(`Failed to load items: ${error.message}`)
       } finally {
         setLoading(false)
       }
     }
 
     fetchItems()
-  }, [API_URL])
+  }, [API_URL, authLoading, user?._id]) // Also depend on user._id to refetch when user changes
 
-
-   // Use callback for filter change to prevent unnecessary re-renders
-   const handleFilterChange = useCallback((e) => {
+  // Use callback for filter change to prevent unnecessary re-renders
+  const handleFilterChange = useCallback((e) => {
     const { name, value } = e.target
     setFilter((prev) => ({
       ...prev,
@@ -57,58 +87,53 @@ const ItemListing = () => {
     })
   }, [])
 
-    // Apply filters using useMemo to avoid unnecessary recalculations
-    const filteredItems = useMemo(() => {
-      return items.filter((item) => {
-        if (filter.category && item.category !== filter.category) return false
-        if (filter.condition && item.condition !== filter.condition) return false
-        if (filter.price && item.price !== filter.price) return false
-        return true
-      })
-    }, [items, filter])
-  
-    // Memoize the unique categories, conditions, and prices
-    const categories = useMemo(() => {
-      return [...new Set(items.map((item) => item.category))].filter(Boolean)
-    }, [items])
-  
-    const conditions = useMemo(() => {
-      return [...new Set(items.map((item) => item.condition))].filter(Boolean)
-    }, [items])
-  
-    const prices = useMemo(() => {
-      return [...new Set(items.map((item) => item.price))].filter(Boolean)
-    }, [items])
-  
-    if (loading) {
-      return <LoadingSpinner message="Loading items..." />
-    }
-  
-    if (error) {
-      return (
-        <div className="error-container">
-          <p className="error-message">{error}</p>
-          <button className="retry-button" onClick={() => window.location.reload()}>
-            Try Again
-          </button>
-        </div>
-      )
-    }
+  // Apply filters using useMemo to avoid unnecessary recalculations
+  const filteredItems = useMemo(() => {
+    const filtered = items.filter((item) => {
+      // Additional frontend filter to ensure no user's own items show up
+      if (user && (item.owner === user._id || item.owner?._id === user._id)) {
+        console.log("Frontend filtering out user's own item:", item)
+        return false
+      }
+      
+      if (filter.category && item.category !== filter.category) return false
+      if (filter.condition && item.condition !== filter.condition) return false
+      if (filter.price && item.price !== filter.price) return false
+      return true
+    })
+    
+    console.log("Filtered items count:", filtered.length)
+    return filtered
+  }, [items, filter, user])
 
-  // return (
-  //   <div className="item-listing-container main">
-  //     <h2>Available Items</h2>
-  //     <div className="item-grid">
-  //       {
-  //         items.map((item)=>(
-            
-  //           <ItemCard  key={item._id}  _id={item._id}  img={item.imageUrls?.[0]} title={item.name} size={item.size} price={item.price} />
-  
-  //         ))
-  //       }
-  //     </div>
-  //   </div>
-  // );
+  // Memoize the unique categories, conditions, and prices
+  const categories = useMemo(() => {
+    return [...new Set(items.map((item) => item.category))].filter(Boolean)
+  }, [items])
+
+  const conditions = useMemo(() => {
+    return [...new Set(items.map((item) => item.condition))].filter(Boolean)
+  }, [items])
+
+  const prices = useMemo(() => {
+    return [...new Set(items.map((item) => item.price))].filter(Boolean)
+  }, [items])
+
+  // Show loading while auth is loading OR items are loading
+  if (authLoading || loading) {
+    return <LoadingSpinner message="Loading items..." />
+  }
+
+  if (error) {
+    return (
+      <div className="error-container">
+        <p className="error-message">{error}</p>
+        <button className="retry-button" onClick={() => window.location.reload()}>
+          Try Again
+        </button>
+      </div>
+    )
+  }
 
   return (
     <div className="item-listing-container main">
@@ -169,7 +194,14 @@ const ItemListing = () => {
             />
           ))
         ) : (
-          <p className="no-items-message">No items found matching your filters.</p>
+          <div>
+            <p className="no-items-message">No items found matching your filters.</p>
+            {!user && (
+              <p style={{ fontSize: '14px', color: '#666', marginTop: '10px' }}>
+                Note: You may need to log in to see personalized results.
+              </p>
+            )}
+          </div>
         )}
       </div>
     </div>

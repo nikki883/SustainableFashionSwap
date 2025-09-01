@@ -92,7 +92,7 @@ const UserReviews = ({ userId }) => {
               <div className="reviewer-info">
                 <div className="reviewer-avatar">
                   <img
-                    src={review.reviewer.profilePicture || "/placeholder.jpg"}
+                    src={review.reviewer.ProfilePic || "/placeholder.jpg"}
                     alt={review.reviewer.name}
                   />
                 </div>

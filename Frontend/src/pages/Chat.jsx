@@ -35,7 +35,7 @@ const Chat = () => {
       console.log("fetching----------------------00");
       try {
         const response = await fetch(
-          "http://localhost:5000/api/messages/conversations",
+          `${import.meta.env.VITE_API_URL}/api/messages/conversations`,
           {
             credentials: "include",
           }
@@ -67,7 +67,7 @@ const Chat = () => {
 
       try {
         const response = await fetch(
-          `http://localhost:5000/api/messages/${activeConversation._id}`,
+          `${import.meta.env.VITE_API_URL}/api/messages/${activeConversation._id}`,
           {
             credentials: "include",
           }
@@ -349,9 +349,9 @@ const Chat = () => {
                 <div className="conversation-avatar">
                   <img
                     src={
-                      conversation.participant?.profilePicture ||
+                      conversation.participant?.profilePic ||
                       "/default-avatar.png"
-                    }
+                    } 
                     alt={conversation.participant?.name || "user"}
                   />
                   {conversation.unreadCount > 0 && (
